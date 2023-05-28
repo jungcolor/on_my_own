@@ -79,6 +79,44 @@ function Create(props) {
     )
 }
 
+function Update(props) {
+    const [title, setTitle] = useState(props.title);
+    const [body, setBody] = useState(props.body);
+    const onClickHandler = (e) => {
+        e.preventDefault();
+        const title = e.target.title.value;
+        const body = e.target.body.value;
+
+        props.onUpdate(title, body);
+    };
+    const onChangeHandler = (e) => {
+        const { name, value } = e.target;
+        if (name === "title") {
+            setTitle(value);
+        }
+        else if (name === "body") {
+            setBody(value);
+        }
+    }
+
+    return (
+        <article>
+            <h2>Update</h2>
+            <form onSubmit={onClickHandler}>
+                <p>
+                    <input type="text" name="title" placeholder="title" value={title} onChange={onChangeHandler} />
+                </p>
+                <p>
+                    <textarea name="body" placeholder="body" value={body} onChange={onChangeHandler}></textarea>
+                </p>
+                <p>
+                    <input type="submit" value="Update" />
+                </p>
+            </form>
+        </article>
+    )
+}
+
 function App() {
     const [mode, setMode] = useState("WELCOME");
     const [id, setId] = useState(null);
@@ -88,9 +126,11 @@ function App() {
         { id: 2, title: "css", body: "css is ..." },
         { id: 3, title: "javascript", body: "javascript is ..." }
     ]);
-    let content = null;
 
-    const onClickHandler = (title, body) => {
+    let content = null;
+    let contextControl = null;
+
+    const onCreateHandler = (title, body) => {
         const newTopic = { id: nextId, title, body };
         const newTopics = [...topics];
         newTopics.push(newTopic);
@@ -98,7 +138,14 @@ function App() {
         setMode("READ");
         setId(nextId);
         setNextId(nextId + 1);
-    }
+    };
+    const onUpdateHandler = (title, body) => {
+        const updatedTopic = { id, title, body };
+        const newTopics = topics.map(topic => (topic.id === id) ? updatedTopic : topic);
+
+        setTopics(newTopics);
+        setMode("READ");
+    };
 
     if (mode === "WELCOME") {
         content = <Article title="Welcome" body="Hello, WEB"></Article>;
@@ -108,10 +155,22 @@ function App() {
             if (topic.id === id) {
                 content = <Article title={topic.title} body={topic.body}></Article>
             }
-        })
+        });
+
+        contextControl = <li><a href={`/update/${id}`} onClick={e => {
+            e.preventDefault();
+            setMode("UPDATE");
+        }}>Update</a></li>;
     }
     else if (mode === "CREATE") {
-        content = <Create onCreate={onClickHandler}></Create>
+        content = <Create onCreate={onCreateHandler}></Create>
+    }
+    else if (mode === "UPDATE") {
+        topics.forEach(topic => {
+            if (topic.id === id) {
+                content = <Update title={topic.title} body={topic.body} onUpdate={onUpdateHandler}></Update>
+            }
+        });
     }
 
     return (
@@ -124,10 +183,15 @@ function App() {
                 setId(_id);
             }}></Nav>
             {content}
-            <a href="/create" onClick={e => {
-                e.preventDefault();
-                setMode("CREATE");
-            }}>Create</a>
+            <ul>
+                <li>
+                    <a href="/create" onClick={e => {
+                        e.preventDefault();
+                        setMode("CREATE");
+                    }}>Create</a>
+                </li>
+                {contextControl}
+            </ul>
         </div>
     );
 }
