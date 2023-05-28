@@ -51,15 +51,54 @@ function Article(props) {
     )
 }
 
+function Create(props) {
+    const { onCreate } = props;
+    const onClickHandler = (e) => {
+        e.preventDefault();
+        const title = e.target.title.value;
+        const body = e.target.body.value;
+
+        onCreate(title, body);
+    };
+
+    return (
+        <article>
+            <h2>Create</h2>
+            <form onSubmit={onClickHandler}>
+                <p>
+                    <input type="text" name="title" placeholder="title" />
+                </p>
+                <p>
+                    <textarea name="body" placeholder="body"></textarea>
+                </p>
+                <p>
+                    <input type="submit" value="Create" />
+                </p>
+            </form>
+        </article>
+    )
+}
+
 function App() {
     const [mode, setMode] = useState("WELCOME");
     const [id, setId] = useState(null);
-    const topics = [
+    const [nextId, setNextId] = useState(4);
+    const [topics, setTopics] = useState([
         { id: 1, title: "html", body: "html is ..." },
         { id: 2, title: "css", body: "css is ..." },
         { id: 3, title: "javascript", body: "javascript is ..." }
-    ];
+    ]);
     let content = null;
+
+    const onClickHandler = (title, body) => {
+        const newTopic = { id: nextId, title, body };
+        const newTopics = [...topics];
+        newTopics.push(newTopic);
+        setTopics(newTopics);
+        setMode("READ");
+        setId(nextId);
+        setNextId(nextId + 1);
+    }
 
     if (mode === "WELCOME") {
         content = <Article title="Welcome" body="Hello, WEB"></Article>;
@@ -70,6 +109,9 @@ function App() {
                 content = <Article title={topic.title} body={topic.body}></Article>
             }
         })
+    }
+    else if (mode === "CREATE") {
+        content = <Create onCreate={onClickHandler}></Create>
     }
 
     return (
@@ -82,6 +124,10 @@ function App() {
                 setId(_id);
             }}></Nav>
             {content}
+            <a href="/create" onClick={e => {
+                e.preventDefault();
+                setMode("CREATE");
+            }}>Create</a>
         </div>
     );
 }
