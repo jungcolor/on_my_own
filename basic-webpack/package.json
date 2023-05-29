@@ -12,7 +12,11 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@babel/core": "^7.22.1",
+        "@babel/preset-env": "^7.22.2",
+        "babel-loader": "^9.1.2",
         "clean-webpack-plugin": "^4.0.0",
+        "core-js": "^3.30.2",
         "css-loader": "^6.8.1",
         "css-minimizer-webpack-plugin": "^5.0.0",
         "dotenv-webpack": "^8.0.1",
@@ -26,5 +30,10 @@
         "webpack-cli": "^5.1.1",
         "webpack-dev-server": "^4.15.0",
         "webpack-merge": "^5.9.0"
-    }
+    },
+    "browserslist": [
+        "ie 11",
+        "chrome 111",
+        "firefox 111"
+    ]
 }

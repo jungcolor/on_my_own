@@ -14,5 +14,5 @@
 
 ## 예시
 
-Fix: Widget - Button Align
-Feat: Webpack - v6.0.0
+-   Fix: Widget - Button Align
+-   Feat: Webpack - v6.0.0

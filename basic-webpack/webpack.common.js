@@ -14,6 +14,16 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.js$/,
+                exclude: /node_modules/, // 제외할 폴더
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        cacheDirectory: true // 바벨 캐시 설정
+                    }
+                }
+            },
+            {
                 test: /\.(png|svg|jpe?g|gif|webp)$/i,
                 type: 'asset', // 기본적으로 8kb 이하라면 url-loader로, 이상이면 file-loader로 동작
                 parser: {
