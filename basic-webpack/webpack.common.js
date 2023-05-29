@@ -32,4 +32,10 @@ module.exports = {
             template: 'index.html'
         })
     ],
+    stats: {
+        preset: 'minimal',
+        moduleTrace: true, // 종속성 경고/에러 표시
+        errorDetails: true, // 에러 세부 정보
+        chunks: true
+    }
 }
