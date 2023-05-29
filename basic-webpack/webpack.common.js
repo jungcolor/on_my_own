@@ -1,5 +1,5 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // HTML 플러그인
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // HTML 플러그인 패키지
 
 module.exports = {
     entry: {
